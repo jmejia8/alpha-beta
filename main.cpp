@@ -1,19 +1,58 @@
 #include <iostream>
-#include <cmath>
 #include "main.hpp"
 
+#define INF 6666666
 
-void createTree(int tree_len, Node* tree, int branches){
-	int k = 0;
-	for (int i = 0; k < tree_len - branches; ++i) {
-		tree[i].setChildren(branches);
+int min(int a, int b){
+	if (a < b)
+		return a;
+	return b;
+}
 
-		for (int j = 0; j <  branches; ++j) {
-			tree[i].inserChild(++k);
-		}
+int max(int a, int b){
+	if (a > b)
+		return a;
+	return b;
+}
+
+int* output;
+
+
+int alpha_beta(Node* tree, int actual, int alpha, int beta, bool maxx){
+
+	if (tree[actual].getChildren() == NULL) {
+		cout << "\n >>> " << "  " << actual << "  " << tree[actual].getValue() << endl;
+		return tree[actual].getValue();
 	}
 
-	cout << endl;
+	int* children = tree[actual].getChildren();
+	int branches = tree[actual].getCounter();
+	int v;
+
+	if (maxx) {
+		v = -INF;
+		for (int i = 0; i < branches; ++i) {
+			v = max(v, alpha_beta(tree, children[i], alpha, beta, not maxx));
+			alpha = max(alpha, v);
+
+			if (beta <= alpha)
+				break;
+		}
+
+		return v;
+	}
+
+	v = INF;
+	for (int i = 0; i < branches; ++i) {
+		v = min(v, alpha_beta(tree, children[i], alpha, beta, not maxx));
+		beta = min(beta, v);
+
+		if (beta <= alpha)
+			break;
+	}
+
+	return v;
+
 }
 
 
@@ -49,6 +88,8 @@ int main(int argc, char const *argv[])
 	}
 
 	cout << "\nEl árbol se creó con éxito" << endl;
+
+	int value = alpha_beta(tree, 0, -INF, INF, true) << endl;
 
 
 	return 0;
