@@ -1,13 +1,22 @@
 using namespace std;
 
+// Nodo del árbol
 class Node
 {
 private:
+	// Valor del nodo
 	int value;
+
+	// Cantidad de hijos
 	int children;
+
+	// total de Nodos agragados
 	int children_counter = 0;
+
+	// Arreglo de los índices de los hijos
 	int* children_nodes = NULL;
 public:
+	// Contructores
 	Node(int val, int children) : value(val), children_counter(children) {};
 	Node() {};
 
@@ -34,8 +43,10 @@ public:
 
 };
 
+// Crea árbol usando lista de adyacencia
 void createTree(int tree_len, Node* tree, int branches){
 	int k = 0;
+	// Crea la topología con la enumeración de los nodos
 	for (int i = 0; k < tree_len - branches; ++i) {
 		tree[i].setChildren(branches);
 
